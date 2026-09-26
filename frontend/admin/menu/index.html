@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Suki - จัดการเมนูอาหาร</title>
+    <link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="brand">
+        <img
+                    src="http://localhost:3000/images/logo.png"
+                    class="logo"
+                    alt="โลโก้ร้าน"
+                >
+        <div class="brand-name">PREMIUM SUKI</div>
+        <div class="brand-sub">---BUFFET---</div>
+    </div>
+
+    <nav>
+        <a href="../dashboard/index.html">🏠 หน้าหลัก</a>
+        <a href="../table/index.html">🪑 จัดการโต๊ะ</a>
+        <a href="../package/index.html">🎫 จัดการแพ็กเกจ</a>
+        <a class="active">🍲 จัดการเมนูอาหาร</a>
+        <a href="../stock/index.html">🥬 จัดการวัตถุดิบ</a>
+        <a href="../promotion/index.html">🏷️ จัดการโปรโมชั่น</a>
+        <a href="../order/index.html">🛒 จัดการออเดอร์</a>
+        <a href="../kds/index.html">👨‍🍳 จัดการครัว (KDS)</a>
+        <a href="../payment/index.html">💳 ชำระเงิน (POS)</a>
+        <a href="../report/index.html">📊 รายงาน</a>
+        <a href="../settings/index.html">⚙️ ตั้งค่าระบบ</a>
+    </nav>
+
+    <div class="admin">
+        <div class="admin-avatar">●</div>
+        <div>
+            <b>Admin</b>
+            <span>ผู้ดูแลระบบ</span>
+        </div>
+    </div>
+    <div class="logout">ออกจากระบบ</div>
+</aside>
+
+<main class="main">
+
+    <header class="topbar">
+        <div class="top-left">
+            <button class="hamburger">☰</button>
+            <div>
+                <b>Premium Suki Buffet</b>
+                <span>อร่อยไม่อั้น ความสุขไม่มีสิ้นสุด</span>
+            </div>
+        </div>
+        <div class="top-right">
+            <span class="bell">●</span>
+            <div id="currentDateTime"></div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-text">
+            <div class="title-icon">🍴</div>
+            <div>
+                <h1>จัดการเมนูอาหาร</h1>
+                <p>เพิ่ม แก้ไข หรือลบเมนูอาหารของร้าน</p>
+            </div>
+        </div>
+
+        <div class="hero-actions">
+            <button class="outline-btn" id="importExportBtn">⇩ นำเข้า/ส่งออกข้อมูล</button>
+            <input
+    type="file"
+    id="importFile"
+    accept=".csv"
+    hidden
+>
+
+<div class="import-export-modal" id="importExportModal">
+
+    <div class="import-export-box">
+
+        <h3>นำเข้า / ส่งออกข้อมูล</h3>
+
+        <p>เลือกการทำงานที่ต้องการ</p>
+
+        <div class="import-export-buttons">
+
+            <button id="importDataBtn">
+                📥 นำเข้าข้อมูล
+            </button>
+
+            <button id="exportDataBtn">
+                📤 ส่งออกข้อมูล
+            </button>
+
+        </div>
+
+        <button
+            class="modal-cancel-btn"
+            id="closeImportExport"
+        >
+            ยกเลิก
+        </button>
+
+    </div>
+
+</div>
+            <button class="add-btn" id="addBtn">+ เพิ่มเมนูใหม่</button>
+        </div>
+
+        <div class="filters">
+            <div class="search-box">
+                🔍 <input id="searchInput" placeholder="ค้นหาเมนู (ชื่อเมนู, หมวดหมู่,...)">
+            </div>
+            <select id="categoryFilter">
+                <option value="">หมวดหมู่ทั้งหมด</option>
+            </select>
+            <select id="statusFilter">
+                <option value="">สถานะทั้งหมด</option>
+                <option value="พร้อมขาย">พร้อมขาย</option>
+                <option value="หยุดขาย">หยุดขาย</option>
+                <option value="หมด">หมด</option>
+            </select>
+            <button class="search-btn">🔍 ค้นหา</button>
+        </div>
+    </section>
+
+    <div class="category-tabs" id="categoryTabs">
+        <button class="tab active" data-category="">▦ ทั้งหมด (<span id="totalCount">0</span>)</button>
+    </div>
+
+    <section class="workspace">
+        <div class="menu-area">
+            <div class="menu-grid" id="menuGrid">
+                <div class="loading">กำลังโหลดข้อมูล...</div>
+            </div>
+
+            <div class="pagination">
+                <span id="pageText">แสดง 0 - 0 จาก 0 รายการ</span>
+                <div>
+                    <button id="prevPage">‹</button>
+                    <button class="page-current" id="currentPage">1</button>
+                    <button id="nextPage">›</button>
+                </div>
+            </div>
+        </div>
+
+        <aside class="form-panel" id="formPanel">
+            <div class="form-title">
+                <div>
+                    <h2 id="formTitle">เพิ่มเมนูใหม่</h2>
+                    <p>กรอกข้อมูลเมนูอาหาร</p>
+                </div>
+                <button id="closeForm">×</button>
+            </div>
+
+
+            <form id="menuForm">
+
+            <input type="hidden" id="menuId">
+
+            <label>ชื่อเมนู</label>
+            <input
+                id="menuName"
+                required
+                placeholder="กรอกชื่อเมนู..."
+            >
+
+            <label>หมวดหมู่</label>
+            <select id="menuCategory">
+                <option value="">เลือกหมวดหมู่</option>
+                <option>เนื้อ</option>
+                <option>หมู</option>
+                <option>ไก่</option>
+                <option>อาหารทะเล</option>
+                <option>ผัก</option>
+                <option>ลูกชิ้น/ของทานเล่น</option>
+                <option>อื่นๆ</option>
+            </select>
+
+            <label>รายละเอียด</label>
+            <textarea
+                id="menuDescription"
+                placeholder="กรอกรายละเอียดเมนู"
+            ></textarea>
+
+            <div class="two-col">
+
+            <div>
+                <label>ราคา(บาท)</label>
+                <input
+                    id="menuPrice"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00"
+                >
+            </div>
+
+            <div>
+                <label>สถานะ</label>
+                <select id="menuStatus">
+                    <option>พร้อมขาย</option>
+                    <option>หยุดขาย</option>
+                    <option>หมด</option>
+                </select>
+            </div>
+
+            </div>
+
+    <!-- รูปภาพเมนู -->
+            <label>รูปภาพเมนู</label>
+
+            <div class="upload-box" id="uploadBox">
+
+            <input
+                type="file"
+                id="menuImage"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                hidden
+            >
+
+            <div class="upload-content" id="uploadContent">
+
+                <img
+                    src="http://localhost:3000/images/upload-icon.webp"
+                    class="upload-icon"
+                    alt="อัปโหลดรูปภาพ"
+                >
+
+                <div class="upload-title">
+                    คลิกเพื่ออัปโหลดรูปภาพ
+                </div>
+
+                <div class="upload-note">
+                    รองรับไฟล์ JPG, PNG, WEBP และ GIF<br>
+                    ขนาดไม่เกิน 5 MB
+                </div>
+
+            </div>
+
+                <div id="imagePreview" class="image-preview"></div>
+
+            </div>
+
+
+    <!-- ปุ่ม -->
+<div class="form-buttons">
+
+    <button
+        type="button"
+        class="cancel-btn"
+        id="cancelBtn"
+    >
+        ยกเลิก
+    </button>
+
+    <button
+        type="submit"
+        class="save-btn"
+    >
+        บันทึก
+    </button>
+
+</div>
+
+</form>
+
+            
+        </aside>
+    </section>
+</main>
+
+<div id="toast" class="toast"></div>
+
+<script src="app.js?v=1"></script>
+</body>
+</html>

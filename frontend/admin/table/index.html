@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Premium Suki - จัดการโต๊ะ</title>
+
+    <link rel="stylesheet" href="style.css?v=2">
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar">
+
+    <div class="brand">
+
+        <img
+            src="http://localhost:3000/images/logo.png"
+            class="logo"
+            alt="โลโก้ร้าน"
+        >
+
+        <div class="brand-name">
+            PREMIUM SUKI
+        </div>
+
+        <div class="brand-sub">
+            ---BUFFET---
+        </div>
+
+    </div>
+
+
+    <nav>
+
+        <a href="../dashboard/index.html">
+            🏠 หน้าหลัก
+        </a>
+
+        <a
+            href="index.html"
+            class="active"
+        >
+        🪑 จัดการโต๊ะ
+        </a>
+
+        <a href="../package/index.html">
+            🎫 จัดการแพ็กเกจ
+        </a>
+
+        <a href="../menu/index.html">
+            🍲 จัดการเมนูอาหาร
+        </a>
+
+        <a href="../stock/index.html">
+            🥬 จัดการวัตถุดิบ
+        </a>
+
+        <a href="../promotion/index.html">
+            🏷️ จัดการโปรโมชั่น
+        </a>
+
+        <a href="../order/index.html">
+            🛒 จัดการออเดอร์
+        </a>
+
+        <a href="../../kds/index.html">
+            👨‍🍳 จัดการครัว(KDS)
+        </a>
+
+        <a href="../payment/index.html">
+            💳 ชำระเงิน(POS)
+        </a>
+
+        <a href="../report/index.html">
+           📊 รายงาน
+        </a>
+
+        <a href="../setting/index.html">
+           ⚙️ ตั้งค่าระบบ
+        </a>
+
+    </nav>
+
+
+    <div class="admin">
+
+        <div class="admin-avatar">
+            ●
+        </div>
+
+        <div>
+            <b id="adminName">
+                Admin
+            </b>
+
+            <span>
+                ผู้ดูแลระบบ
+            </span>
+        </div>
+
+    </div>
+
+
+    <div
+        class="logout"
+        id="logoutButton"
+    >
+        ออกจากระบบ
+    </div>
+
+</aside>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="main">
+
+
+    <!-- =========================
+         TOPBAR
+    ========================== -->
+
+    <header class="topbar">
+
+        <div class="top-left">
+
+            <div class="page-heading">
+
+                <div class="title-icon">
+                    🪑
+                </div>
+
+                <div>
+
+                    <h1>
+                        จัดการโต๊ะ
+                    </h1>
+
+                    <p>
+                        จัดการข้อมูลโต๊ะอาหารภายในร้าน
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="top-right">
+
+            <span class="bell">
+                🔔
+            </span>
+
+            <div id="currentDateTime"></div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         SUMMARY + ADD
+    ========================== -->
+
+    <section class="summary-area">
+
+        <div class="summary-card">
+
+            <div class="summary-icon gray">
+                🪑
+            </div>
+
+            <div>
+                <span>
+                    จำนวนโต๊ะทั้งหมด
+                </span>
+
+                <strong id="totalTables">
+                    0 โต๊ะ
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon green">
+                🪑
+            </div>
+
+            <div>
+                <span>
+                    โต๊ะว่าง
+                </span>
+
+                <strong id="availableTables">
+                    0 โต๊ะ
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon red">
+                🪑
+            </div>
+
+            <div>
+                <span>
+                    ใช้งานอยู่
+                </span>
+
+                <strong id="occupiedTables">
+                    0 โต๊ะ
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon gray">
+                🪑
+            </div>
+
+            <div>
+                <span>
+                    จองแล้ว
+                </span>
+
+                <strong id="reservedTables">
+                    0 โต๊ะ
+                </strong>
+            </div>
+
+        </div>
+
+
+        <button
+            class="add-btn"
+            id="addBtn"
+        >
+            ⊕ เพิ่มโต๊ะใหม่
+        </button>
+
+    </section>
+
+
+    <!-- =========================
+         FILTER BAR
+    ========================== -->
+
+    <section class="filter-bar">
+
+        <div class="filter-tabs">
+
+            <button
+                class="filter-tab active"
+                data-status=""
+            >
+                ทั้งหมด (<span id="allCount">0</span>)
+            </button>
+
+            <button
+                class="filter-tab"
+                data-status="ว่าง"
+            >
+                ว่าง (<span id="availableCount">0</span>)
+            </button>
+
+            <button
+                class="filter-tab"
+                data-status="ใช้งานอยู่"
+            >
+                ใช้งานอยู่ (<span id="occupiedCount">0</span>)
+            </button>
+
+            <button
+                class="filter-tab"
+                data-status="จองแล้ว"
+            >
+                จองแล้ว (<span id="reservedCount">0</span>)
+            </button>
+
+        </div>
+
+
+        <div class="filter-tools">
+
+            <div class="search-box">
+
+                🔍
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="ค้นหาเลขโต๊ะ..."
+                >
+
+            </div>
+
+
+            <select id="sortSelect">
+
+                <option value="number">
+                    เรียงตามเลขโต๊ะ
+                </option>
+
+                <option value="capacity">
+                    จำนวนที่นั่ง
+                </option>
+
+                <option value="status">
+                    สถานะ
+                </option>
+
+            </select>
+
+
+            <button
+                type="button"
+                class="view-toggle active"
+                id="gridViewBtn"
+                title="มุมมองการ์ด"
+            >
+                ▦
+            </button>
+
+
+            <button
+                type="button"
+                class="view-toggle"
+                id="listViewBtn"
+                title="มุมมองตาราง"
+            >
+                ☷
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         TABLE CARDS
+    ========================== -->
+
+    <section
+        class="table-grid"
+        id="tableGrid"
+    >
+
+        <div class="loading">
+            กำลังโหลดข้อมูลโต๊ะ...
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         FORM MODAL
+    ========================== -->
+
+    <div
+        class="modal"
+        id="formModal"
+    >
+
+        <div class="form-panel">
+
+            <div class="form-title">
+
+                <div>
+
+                    <h2 id="formTitle">
+                        เพิ่มโต๊ะใหม่
+                    </h2>
+
+                    <p>
+                        กรอกข้อมูลโต๊ะ
+                    </p>
+
+                </div>
+
+
+                <button
+                    id="closeForm"
+                    class="close-form"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <form id="tableForm">
+
+                <input
+                    type="hidden"
+                    id="tableId"
+                >
+
+
+                <label>
+                    เลขโต๊ะ
+                </label>
+
+                <input
+                    type="text"
+                    id="tableNumber"
+                    placeholder="เช่น T01"
+                    required
+                >
+
+
+                <label>
+                    จำนวนที่นั่ง
+                </label>
+
+                <input
+                    type="number"
+                    id="capacity"
+                    min="1"
+                    placeholder="เช่น 4"
+                    required
+                >
+
+
+                <label>
+                    สถานะ
+                </label>
+
+                <select id="tableStatus">
+
+                    <option value="ว่าง">
+                        ว่าง
+                    </option>
+
+                    <option value="ใช้งานอยู่">
+                        ใช้งานอยู่
+                    </option>
+
+                    <option value="จองแล้ว">
+                        จองแล้ว
+                    </option>
+
+                </select>
+
+
+                <label>
+                    QR Code
+                </label>
+
+                <input
+                    type="text"
+                    id="qrCode"
+                    placeholder="เช่น QR-T01"
+                >
+
+
+                <div class="form-buttons">
+
+                    <button
+                        type="button"
+                        class="cancel-btn"
+                        id="cancelBtn"
+                    >
+                        ยกเลิก
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="save-btn"
+                    >
+                        บันทึก
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+</main>
+
+
+<div
+    id="toast"
+    class="toast"
+></div>
+
+<!-- =========================
+     TABLE DETAIL MODAL
+========================= -->
+
+<div
+    class="table-detail-modal"
+    id="tableDetailModal"
+>
+
+    <div class="table-detail-box">
+
+        <div class="table-detail-header">
+
+            <div>
+                <h2>🪑 รายละเอียดโต๊ะ</h2>
+                <p>ข้อมูลการใช้งานโต๊ะ</p>
+            </div>
+
+            <button
+                type="button"
+                id="closeTableDetail"
+                class="table-detail-close"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="table-detail-content">
+
+            <div class="table-detail-number">
+                <span id="detailTableNumber">
+                    T01
+                </span>
+            </div>
+
+
+            <div class="detail-status-box">
+
+                <span>
+                    สถานะ
+                </span>
+
+                <strong id="detailStatus">
+                    ว่าง
+                </strong>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span>จำนวนที่นั่ง</span>
+
+                <strong id="detailCapacity">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span>QR Code</span>
+
+                <strong id="detailQr">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div
+                id="detailSession"
+                class="detail-session"
+            >
+
+                <div class="detail-session-title">
+                    ข้อมูลการใช้งาน
+                </div>
+
+
+                <div class="detail-row">
+
+                    <span>ลูกค้า</span>
+
+                    <strong id="detailCustomer">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <span>แพ็กเกจ</span>
+
+                    <strong id="detailPackage">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <span>เริ่มใช้งาน</span>
+
+                    <strong id="detailStart">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <span>เวลาที่เหลือ</span>
+
+                    <strong
+                        id="detailTimer"
+                        class="detail-modal-timer"
+                    >
+                        -
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-detail-footer">
+
+            <button
+                type="button"
+                id="detailEndSession"
+                class="detail-end-btn"
+            >
+                จบการใช้งาน
+            </button>
+
+            <button
+                type="button"
+                id="detailCloseBtn"
+                class="detail-close-btn"
+            >
+                ปิด
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="app.js?v=2"></script>
+
+</body>
+
+</html>

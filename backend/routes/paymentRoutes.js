@@ -1,0 +1,171 @@
+const express = require('express');
+const router = express.Router();
+const db = require('../config/database');
+
+
+// ===============================
+// API แสดงข้อมูลการชำระเงิน
+// ===============================
+router.get('/', (req, res) => {
+    const sql = 'SELECT * FROM payment';
+
+    db.query(sql, (err, results) => {
+        if (err) {
+            return res.status(500).json({
+                success: false,
+                message: 'ไม่สามารถดึงข้อมูลการชำระเงินได้',
+                error: err.message
+            });
+        }
+
+        res.json({
+            success: true,
+            data: results
+        });
+    });
+});
+
+
+// ===============================
+// API เพิ่มข้อมูลการชำระเงิน
+// ===============================
+router.post('/', (req, res) => {
+    const {
+        session_id,
+        payment_method,
+        amount,
+        paid_at,
+        status
+    } = req.body;
+
+    const sql = `
+        INSERT INTO payment
+        (session_id, payment_method, amount, paid_at, status)
+        VALUES (?, ?, ?, ?, ?)
+    `;
+
+    db.query(
+        sql,
+        [
+            session_id,
+            payment_method,
+            amount,
+            paid_at,
+            status
+        ],
+        (err, result) => {
+            if (err) {
+                return res.status(500).json({
+                    success: false,
+                    message: 'เพิ่มข้อมูลการชำระเงินไม่สำเร็จ',
+                    error: err.message
+                });
+            }
+
+            res.json({
+                success: true,
+                message: 'เพิ่มข้อมูลการชำระเงินสำเร็จ',
+                payment_id: result.insertId
+            });
+        }
+    );
+});
+
+
+// ===============================
+// API แก้ไขข้อมูลการชำระเงิน
+// ===============================
+router.put('/:id', (req, res) => {
+    const { id } = req.params;
+
+    const {
+        session_id,
+        payment_method,
+        amount,
+        paid_at,
+        status
+    } = req.body;
+
+    const sql = `
+        UPDATE payment
+        SET session_id = ?,
+            payment_method = ?,
+            amount = ?,
+            paid_at = ?,
+            status = ?
+        WHERE payment_id = ?
+    `;
+
+    db.query(
+        sql,
+        [
+            session_id,
+            payment_method,
+            amount,
+            paid_at,
+            status,
+            id
+        ],
+        (err, result) => {
+            if (err) {
+                return res.status(500).json({
+                    success: false,
+                    message: 'แก้ไขข้อมูลการชำระเงินไม่สำเร็จ',
+                    error: err.message
+                });
+            }
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'ไม่พบข้อมูลการชำระเงินที่ต้องการแก้ไข'
+                });
+            }
+
+            res.json({
+                success: true,
+                message: 'แก้ไขข้อมูลการชำระเงินสำเร็จ'
+            });
+        }
+    );
+});
+
+
+// ===============================
+// API ลบข้อมูลการชำระเงิน
+// ===============================
+router.delete('/:id', (req, res) => {
+    const { id } = req.params;
+
+    db.query(
+        'DELETE FROM payment WHERE payment_id = ?',
+        [id],
+        (err, result) => {
+            if (err) {
+                return res.status(500).json({
+                    success: false,
+                    message: 'ลบข้อมูลการชำระเงินไม่สำเร็จ',
+                    error: err.message
+                });
+            }
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'ไม่พบข้อมูลการชำระเงินที่ต้องการลบ'
+                });
+            }
+
+            res.json({
+                success: true,
+                message: 'ลบข้อมูลการชำระเงินสำเร็จ'
+            });
+        }
+    );
+});
+
+
+// ===============================
+// ส่ง Router กลับไปให้ server.js
+// ===============================
+module.exports = router;

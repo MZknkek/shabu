@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Dashboard | Premium Suki</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css?v=1"
+    >
+</head>
+
+<body>
+
+    <!-- =========================
+         Sidebar
+    ========================== -->
+
+    <aside class="sidebar">
+
+    <div class="brand">
+
+        <img
+            src="http://localhost:3000/images/logo.png"
+            class="logo"
+            alt="โลโก้ร้าน"
+        >
+
+        <div class="brand-name">
+            PREMIUM SUKI
+        </div>
+
+        <div class="brand-sub">
+            ---BUFFET---
+        </div>
+
+    </div>
+
+
+    <nav>
+
+        <a
+            href="index.html"
+            class="active"
+        >
+            🏠 หน้าหลัก
+        </a>
+
+        <a href="../table/index.html">
+            🪑 จัดการโต๊ะ
+        </a>
+
+        <a href="../package/index.html">
+            🎫 จัดการแพ็กเกจ
+        </a>
+
+        <a href="../menu/index.html">
+            🍲 จัดการเมนูอาหาร
+        </a>
+
+        <a href="../stock/index.html">
+            🥬 จัดการวัตถุดิบ
+        </a>
+
+        <a href="../promotion/index.html">
+            🏷️ จัดการโปรโมชั่น
+        </a>
+
+        <a href="../order/index.html">
+            🛒 จัดการออเดอร์
+        </a>
+
+        <a href="../../kds/index.html">
+            👨‍🍳 จัดการครัว (KDS)
+        </a>
+
+        <a href="../payment/index.html">
+            💳 ชำระเงิน (POS)
+        </a>
+
+        <a href="../report/index.html">
+            📊 รายงาน
+        </a>
+
+        <a href="../setting/index.html">
+            ⚙️ ตั้งค่าระบบ
+        </a>
+
+    </nav>
+
+
+    <div class="admin">
+
+        <div class="admin-avatar">
+            ●
+        </div>
+
+        <div>
+
+            <b id="adminName">
+                Admin
+            </b>
+
+            <span>
+                ผู้ดูแลระบบ
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="logout"
+        id="logoutButton"
+    >
+        ออกจากระบบ
+    </div>
+
+</aside>
+
+
+    <!-- =========================
+         Main
+    ========================== -->
+
+    <main class="main-content">
+
+        <!-- Header -->
+
+        <header class="top-header">
+
+            <div>
+
+                <h1>
+                    ยินดีต้อนรับเข้าสู่ระบบ
+                </h1>
+
+                <p>
+                    Premium Suki Buffet |
+                    อร่อยไม่อั้น ความสุขไม่มีสิ้นสุด
+                </p>
+
+            </div>
+
+
+            <div class="header-right">
+
+                <span class="notification">
+                    🔔
+                </span>
+
+                <div
+                    id="currentDateTime"
+                    class="date-time"
+                >
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- Banner -->
+
+        <section class="banner">
+
+            <div class="banner-text">
+
+                <h2>
+                    พรีเมียมชาบู<br>
+                    วัตถุดิบคุณภาพ<br>
+                    อร่อยได้ไม่อั้น
+                </h2>
+
+                <p>
+                    GOOD FOOD . GOOD PEOPLE . GREAT MOMENTS
+                </p>
+
+            </div>
+
+            <div class="banner-quote">
+
+                “ อาหารที่ดี<br>
+                คือความสุขที่แบ่งปันได้ ”
+
+                <small>
+                    — PREMIUM SUKI —
+                </small>
+
+            </div>
+
+        </section>
+
+
+        <!-- Summary Cards -->
+
+        <section class="summary-grid">
+
+            <div class="summary-card">
+
+                <div class="summary-icon customer">
+                    👥
+                </div>
+
+                <div class="summary-info">
+
+                    <span>
+                        จำนวนลูกค้าวันนี้
+                    </span>
+
+                    <strong id="customerCount">
+                        0 คน
+                    </strong>
+
+                    <small>
+                        ↑ <b>+12%</b>
+                        จากเมื่อวาน
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-icon table">
+                    🪑
+                </div>
+
+                <div class="summary-info">
+
+                    <span>
+                        โต๊ะที่ใช้งานได้อยู่
+                    </span>
+
+                    <strong id="tableCount">
+                        0/0 โต๊ะ
+                    </strong>
+
+                    <div class="progress">
+
+                        <div
+                            id="tableProgress"
+                            class="progress-bar"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-icon order">
+                    🛒
+                </div>
+
+                <div class="summary-info">
+
+                    <span>
+                        ออเดอร์วันนี้
+                    </span>
+
+                    <strong id="orderCount">
+                        0 รายการ
+                    </strong>
+
+                    <small>
+                        ↑ <b>+8%</b>
+                        จากเมื่อวาน
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-icon sales">
+                    💰
+                </div>
+
+                <div class="summary-info">
+
+                    <span>
+                        ยอดขายวันนี้
+                    </span>
+
+                    <strong id="salesTotal">
+                        ฿ 0
+                    </strong>
+
+                    <small>
+                        ↑ <b>+15%</b>
+                        จากเมื่อวาน
+                    </small>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Dashboard Middle -->
+
+        <section class="dashboard-grid">
+
+            <!-- Recent Orders -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h2>
+                        ออเดอร์ล่าสุด
+                    </h2>
+
+                    <a href="../order/index.html">
+                        ดูทั้งหมด &gt;
+                    </a>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>#</th>
+                                <th>โต๊ะ</th>
+                                <th>รายการ</th>
+                                <th>จำนวน</th>
+                                <th>สถานะ</th>
+                                <th>เวลา</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="recentOrders">
+
+                            <tr>
+                                <td
+                                    colspan="6"
+                                    class="empty"
+                                >
+                                    กำลังโหลดข้อมูล...
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- Table Status -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h2>
+                        สถานะโต๊ะ
+                    </h2>
+
+                    <a href="../table/index.html">
+                        ดูทั้งหมด &gt;
+                    </a>
+
+                </div>
+
+
+                <div class="table-legend">
+
+                    <span>
+                        <i class="dot available"></i>
+                        ว่าง
+                    </span>
+
+                    <span>
+                        <i class="dot occupied"></i>
+                        ใช้งานอยู่
+                    </span>
+
+                    <span>
+                        <i class="dot reserved"></i>
+                        จองแล้ว
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="tableStatusGrid"
+                    class="table-status-grid"
+                >
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Quick Actions -->
+
+        <section class="quick-grid">
+
+            <a
+                href="../menu/index.html"
+                class="quick-card"
+            >
+
+                <div class="quick-image menu-image"></div>
+
+                <div class="quick-content">
+
+                    <h3>
+                        🍖 จัดการเมนู
+                    </h3>
+
+                    <p>
+                        เพิ่ม แก้ไข วัตถุดิบ
+                    </p>
+
+                    <span>→</span>
+
+                </div>
+
+            </a>
+
+
+            <a
+                href="../stock/index.html"
+                class="quick-card"
+            >
+
+                <div class="quick-image stock-image"></div>
+
+                <div class="quick-content">
+
+                    <h3>
+                        🥬 จัดการวัตถุดิบ
+                    </h3>
+
+                    <p>
+                        เพิ่ม แก้ไข เมนูอาหาร
+                    </p>
+
+                    <span>→</span>
+
+                </div>
+
+            </a>
+
+
+            <a
+                href="../promotion/index.html"
+                class="quick-card"
+            >
+
+                <div class="quick-image promotion-image"></div>
+
+                <div class="quick-content">
+
+                    <h3>
+                        🏷️ จัดการโปรโมชั่น
+                    </h3>
+
+                    <p>
+                        เพิ่ม แก้ไข โปรโมชั่น
+                    </p>
+
+                    <span>→</span>
+
+                </div>
+
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <script src="app.js?v=1"></script>
+
+</body>
+
+</html>
