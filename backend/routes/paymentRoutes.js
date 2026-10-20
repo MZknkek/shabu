@@ -68,13 +68,13 @@ router.post('/', (req, res) => {
         session_id,
         payment_method,
         amount,
-        paid_at,
+        payment_time,
         status
     } = req.body;
 
     const sql = `
         INSERT INTO payment
-        (session_id, payment_method, amount, paid_at, status)
+        (session_id, payment_method, amount, payment_time, status)
         VALUES (?, ?, ?, ?, ?)
     `;
 
@@ -84,7 +84,7 @@ router.post('/', (req, res) => {
             session_id,
             payment_method,
             amount,
-            paid_at,
+            payment_time,
             status
         ],
         (err, result) => {
@@ -125,7 +125,7 @@ router.put('/:id', (req, res) => {
         session_id,
         payment_method,
         amount,
-        paid_at,
+        payment_time,
         status
     } = req.body;
 
@@ -134,7 +134,7 @@ router.put('/:id', (req, res) => {
         SET session_id = ?,
             payment_method = ?,
             amount = ?,
-            paid_at = ?,
+            payment_time = ?,
             status = ?
         WHERE payment_id = ?
     `;
@@ -145,7 +145,7 @@ router.put('/:id', (req, res) => {
             session_id,
             payment_method,
             amount,
-            paid_at,
+            payment_time,
             status,
             id
         ],
