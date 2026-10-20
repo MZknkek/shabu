@@ -86,9 +86,50 @@ setInterval(
    Fetch API
 ========================= */
 
+function getAuthHeaders() {
+
+    const token = localStorage.getItem("adminToken");
+
+    return token
+        ? { "Authorization": `Bearer ${token}` }
+        : {};
+
+}
+
+
+function handleUnauthorized(response) {
+
+    if (response.status === 401) {
+
+        localStorage.removeItem("adminToken");
+        localStorage.removeItem("adminUser");
+
+        window.location.href =
+            "../login/index.html";
+
+        return true;
+
+    }
+
+    return false;
+
+}
+
+
 async function fetchData(url) {
 
-    const response = await fetch(url);
+    const response = await fetch(
+        url,
+        { headers: getAuthHeaders() }
+    );
+
+    if (handleUnauthorized(response)) {
+
+        throw new Error(
+            "Session หมดอายุ กรุณาเข้าสู่ระบบใหม่"
+        );
+
+    }
 
     if (!response.ok) {
 

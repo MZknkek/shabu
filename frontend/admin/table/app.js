@@ -1,5 +1,22 @@
 const API = "http://localhost:3000";
 
+function getAuthHeaders(){
+    const token = localStorage.getItem("adminToken");
+    return token
+        ? { "Authorization": `Bearer ${token}` }
+        : {};
+}
+
+function handleUnauthorized(response){
+    if(response.status === 401){
+        localStorage.removeItem("adminToken");
+        localStorage.removeItem("adminUser");
+        window.location.href = "../login/index.html";
+        return true;
+    }
+    return false;
+}
+
 let activeSessions = [];
 let packages = [];
 let timerInterval = null;
@@ -84,7 +101,13 @@ async function loadTables(){
         ]);
 
         const response =
-            await fetch(`${API}/tables`);
+            await fetch(`${API}/tables`, {
+                headers: getAuthHeaders()
+            });
+
+        if(handleUnauthorized(response)){
+            throw new Error("Session หมดอายุ กรุณาเข้าสู่ระบบใหม่");
+        }
 
         if(!response.ok){
             throw new Error(
@@ -1405,6 +1428,7 @@ $("tableForm")
                                 method:"PUT",
 
                                 headers:{
+                                    ...getAuthHeaders(),
                                     "Content-Type":
                                         "application/json"
                                 },
@@ -1430,6 +1454,7 @@ $("tableForm")
                                 method:"POST",
 
                                 headers:{
+                                    ...getAuthHeaders(),
                                     "Content-Type":
                                         "application/json"
                                 },
@@ -1526,9 +1551,15 @@ async function deleteTable(id){
             await fetch(
                 `${API}/tables/${id}`,
                 {
-                    method:"DELETE"
+                    method:"DELETE",
+                    headers: getAuthHeaders()
                 }
             );
+
+
+        if(handleUnauthorized(response)){
+            return;
+        }
 
 
         const result =
@@ -1837,6 +1868,7 @@ async function confirmStartTableSession(){
                     method:"POST",
 
                     headers:{
+                        ...getAuthHeaders(),
                         "Content-Type":
                             "application/json"
                     },
@@ -1923,11 +1955,11 @@ $("logoutButton")
 
 
             localStorage.removeItem(
-                "token"
+                "adminToken"
             );
 
             localStorage.removeItem(
-                "admin"
+                "adminUser"
             );
 
 
@@ -1981,9 +2013,15 @@ async function endTableSession(tableId){
             await fetch(
                 `${API}/service_sessions/${session.session_id}/end`,
                 {
-                    method:"PUT"
+                    method:"PUT",
+                    headers: getAuthHeaders()
                 }
             );
+
+
+        if(handleUnauthorized(response)){
+            return;
+        }
 
 
         const result =
@@ -2037,8 +2075,15 @@ async function loadActiveSessions(){
 
         const response =
             await fetch(
-                `${API}/service_sessions/active`
+                `${API}/service_sessions/active`,
+                {
+                    headers: getAuthHeaders()
+                }
             );
+
+        if(handleUnauthorized(response)){
+            throw new Error("Session หมดอายุ กรุณาเข้าสู่ระบบใหม่");
+        }
 
         const result =
             await response.json();
@@ -2084,8 +2129,15 @@ async function loadPackages(){
 
         const response =
             await fetch(
-                `${API}/packages`
+                `${API}/packages`,
+                {
+                    headers: getAuthHeaders()
+                }
             );
+
+        if(handleUnauthorized(response)){
+            throw new Error("Session หมดอายุ กรุณาเข้าสู่ระบบใหม่");
+        }
 
         const result =
             await response.json();

@@ -5,6 +5,13 @@ const multer = require('multer');
 const express = require('express');
 const cors = require('cors');
 const db = require('./config/database');
+const verifyToken = require('./middleware/auth');
+
+if (!process.env.JWT_SECRET) {
+    console.error('ERROR: ไม่พบค่า JWT_SECRET ใน environment variables');
+    console.error('กรุณาตั้งค่า JWT_SECRET ในไฟล์ .env ก่อนรัน Server');
+    process.exit(1);
+}
 
 const app = express();
 const PORT = 3000;
@@ -99,20 +106,20 @@ app.get('/test-db', (req, res) => {
 // ===============================
 app.use('/auth', authRoutes);
 
-app.use('/tables', tableRoutes);
-app.use('/packages', packageRoutes);
-app.use('/menus', menuRoutes);
-app.use('/ingredients', ingredientRoutes);
-app.use('/promotions', promotionRoutes);
-app.use('/service_sessions', serviceSessionRoutes);
-app.use('/package_menus', packageMenuRoutes);
-app.use('/recipes', recipeRoutes);
-app.use('/orders', orderRoutes);
-app.use('/order_items', orderItemRoutes);
-app.use('/payments', paymentRoutes);
-app.use('/receipts', receiptRoutes);
+app.use('/tables', verifyToken, tableRoutes);
+app.use('/packages', verifyToken, packageRoutes);
+app.use('/menus', verifyToken, menuRoutes);
+app.use('/ingredients', verifyToken, ingredientRoutes);
+app.use('/promotions', verifyToken, promotionRoutes);
+app.use('/service_sessions', verifyToken, serviceSessionRoutes);
+app.use('/package_menus', verifyToken, packageMenuRoutes);
+app.use('/recipes', verifyToken, recipeRoutes);
+app.use('/orders', verifyToken, orderRoutes);
+app.use('/order_items', verifyToken, orderItemRoutes);
+app.use('/payments', verifyToken, paymentRoutes);
+app.use('/receipts', verifyToken, receiptRoutes);
 
-app.post('/upload-image', uploadImage.single('image'), (req, res) => {
+app.post('/upload-image', verifyToken, uploadImage.single('image'), (req, res) => {
     if (!req.file) {
         return res.status(400).json({
             success: false,

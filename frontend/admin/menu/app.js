@@ -7,11 +7,31 @@ let currentImagePath = "";
 
 const $ = id => document.getElementById(id);
 
+function getAuthHeaders(){
+    const token = localStorage.getItem("adminToken");
+    return token ? { "Authorization": `Bearer ${token}` } : {};
+}
+
+function handleUnauthorized(response){
+    if(response.status === 401){
+        localStorage.removeItem("adminToken");
+        localStorage.removeItem("adminUser");
+        window.location.href = "../login/index.html";
+        return true;
+    }
+    return false;
+}
+
 async function loadMenus(){
     $("menuGrid").innerHTML = '<div class="loading">กำลังโหลดข้อมูล...</div>';
 
     try{
-        const response = await fetch(API + "/menus");
+        const response = await fetch(API + "/menus", { headers: getAuthHeaders() });
+
+        if(handleUnauthorized(response)){
+            return;
+        }
+
         const data = await response.json();
 
         if(!response.ok || !data.success){
@@ -342,8 +362,13 @@ async function deleteMenu(id){
 
     try{
         const response = await fetch(`${API}/menus/${id}`, {
-            method:"DELETE"
+            method:"DELETE",
+            headers: getAuthHeaders()
         });
+
+        if(handleUnauthorized(response)){
+            return;
+        }
 
         const data = await response.json();
 
@@ -474,9 +499,14 @@ $("menuForm").addEventListener("submit", async e => {
                 API + "/upload-image",
                 {
                     method:"POST",
+                    headers: getAuthHeaders(),
                     body:formData
                 }
             );
+
+            if(handleUnauthorized(uploadResponse)){
+                return;
+            }
 
             const uploadData = await uploadResponse.json();
 
@@ -513,12 +543,17 @@ $("menuForm").addEventListener("submit", async e => {
                 method: id ? "PUT" : "POST",
 
                 headers:{
-                    "Content-Type":"application/json"
+                    "Content-Type":"application/json",
+                    ...getAuthHeaders()
                 },
 
                 body:JSON.stringify(body)
             }
         );
+
+        if(handleUnauthorized(response)){
+            return;
+        }
 
         const data = await response.json();
 
@@ -641,7 +676,8 @@ $("importFile").addEventListener("change", async () => {
             const response = await fetch(API + "/menus", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    ...getAuthHeaders()
                 },
                 body: JSON.stringify({
                     menu_name: menu.menu_name,
@@ -652,6 +688,10 @@ $("importFile").addEventListener("change", async () => {
                     image: menu.image || null
                 })
             });
+
+            if(handleUnauthorized(response)){
+                return;
+            }
 
             const data = await response.json();
 
