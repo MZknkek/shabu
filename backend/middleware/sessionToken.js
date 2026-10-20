@@ -11,10 +11,19 @@ const verifySessionToken = (req, res, next) => {
     }
 
     const sql = `
-        SELECT session_id, table_id
-        FROM service_session
-        WHERE qr_token = ?
-          AND status = 'ใช้งานอยู่'
+        SELECT
+            ss.session_id,
+            ss.table_id,
+            ss.package_id,
+            ss.customer_count,
+            rt.table_number,
+            bp.package_name,
+            bp.price AS package_price
+        FROM service_session ss
+        LEFT JOIN restaurant_table rt ON ss.table_id = rt.table_id
+        LEFT JOIN buffet_package bp ON ss.package_id = bp.package_id
+        WHERE ss.qr_token = ?
+          AND ss.status = 'ใช้งานอยู่'
         LIMIT 1
     `;
 
@@ -34,8 +43,7 @@ const verifySessionToken = (req, res, next) => {
             });
         }
 
-        req.session_id = results[0].session_id;
-        req.table_id = results[0].table_id;
+        req.session = results[0];
         next();
     });
 };

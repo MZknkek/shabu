@@ -6,6 +6,7 @@ const express = require('express');
 const cors = require('cors');
 const db = require('./config/database');
 const verifyToken = require('./middleware/auth');
+const verifySessionToken = require('./middleware/sessionToken');
 
 if (!process.env.JWT_SECRET) {
     console.error('ERROR: ไม่พบค่า JWT_SECRET ใน environment variables');
@@ -136,6 +137,9 @@ app.use('/orders', verifyToken, orderRoutes);
 app.use('/order_items', verifyToken, orderItemRoutes);
 app.use('/payments', verifyToken, paymentRoutes);
 app.use('/receipts', verifyToken, receiptRoutes);
+
+const customerRoutes = require('./routes/customerRoutes');
+app.use('/customer', verifySessionToken, customerRoutes);
 
 app.post('/upload-image', verifyToken, uploadImage.single('image'), (req, res) => {
     if (!req.file) {
