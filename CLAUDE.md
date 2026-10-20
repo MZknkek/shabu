@@ -21,26 +21,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   - **`customer/`**: Customer-facing interfaces for viewing menus, placing orders, and handling payments.
   - **`images/`**: Uploaded assets storage directory.
 
-## ข้อควรระวังในการย้ายเครื่อง (Portability Notes)
-
-หากนำโปรเจกต์นี้ไปรันบนเครื่องอื่น ต้องดำเนินการดังนี้:
-
-1. **ฐานข้อมูล MySQL**:
-   - ต้องติดตั้ง MySQL และสร้างฐานข้อมูลชื่อ `premium_suki`
-   - ปรับค่าการเชื่อมต่อใน `backend/config/database.js` หรือตั้งค่าผ่านไฟล์ `.env`
-
-2. **การตั้งค่า Environment**:
-   - ให้คัดลอกไฟล์ `backend/.env.example` เป็น `backend/.env` แล้วปรับแก้ค่าให้ตรงกับเครื่องของตัวเอง
-
-3. **Dependencies**:
-   - ต้องรัน `npm install` ในโฟลเดอร์ `backend/` เพื่อติดตั้ง node_modules ก่อนเริ่มใช้งาน
-
-4. **API URL ใน Frontend**:
-   - ตรวจสอบไฟล์ `app.js` ในโฟลเดอร์ต่างๆ ของ `frontend/` ว่ามีการ hardcode URL API ไว้หรือไม่ (เช่น `http://localhost:3000`) หากมีการย้ายเครื่องหรือเปลี่ยน Port ต้องแก้ไขให้ถูกต้อง
-
-5. **สิทธิ์การเข้าถึงโฟลเดอร์**:
-   - ตรวจสอบว่าโฟลเดอร์ `frontend/images` มีสิทธิ์ (Permissions) ให้ Backend สามารถเขียนไฟล์ภาพลงไปได้ (กรณีใช้งานฟังก์ชันอัปโหลดรูป)
-
 ## สรุปสิ่งที่ได้ดำเนินการเพื่อรองรับการย้ายเครื่อง (Summary of Changes)
 
 1. **เพิ่มการรองรับ Environment Variables ในการเชื่อมต่อฐานข้อมูล**:
