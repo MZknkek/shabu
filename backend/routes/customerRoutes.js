@@ -50,7 +50,7 @@ router.get('/menu', verifySessionToken, (req, res) => {
         LEFT JOIN package_menu pm
             ON pm.menu_id = m.menu_id
             AND pm.package_id = ?
-        WHERE m.status = 'ขายได้'
+        WHERE m.status = 'พร้อมขาย'
         ORDER BY m.category, m.menu_name
     `;
 
@@ -124,7 +124,7 @@ router.post('/order', verifySessionToken, (req, res) => {
                 LEFT JOIN package_menu pm
                     ON pm.menu_id = m.menu_id
                     AND pm.package_id = ?
-                WHERE m.menu_id IN (?) AND m.status = 'ขายได้'
+                WHERE m.menu_id IN (?) AND m.status = 'พร้อมขาย'
             `;
 
             connection.query(menuSql, [session.package_id, menuIds], (err, menuResults) => {
@@ -154,7 +154,7 @@ router.post('/order', verifySessionToken, (req, res) => {
                 }
 
                 const orderSql = `
-                    INSERT INTO orders (session_id, order_status, created_at)
+                    INSERT INTO orders (session_id, status, order_time)
                     VALUES (?, 'รอดำเนินการ', NOW())
                 `;
 
@@ -174,18 +174,19 @@ router.post('/order', verifySessionToken, (req, res) => {
 
                     for (const item of items) {
                         const menu = menuMap[item.menu_id];
-                        itemValues.push('(?, ?, ?, ?)');
+                        itemValues.push('(?, ?, ?, ?, ?)');
                         itemParams.push(
                             orderId,
                             item.menu_id,
                             item.quantity,
-                            menu.final_price
+                            menu.final_price,
+                            'รอดำเนินการ'
                         );
                     }
 
                     const itemSql = `
                         INSERT INTO order_item
-                        (order_id, menu_id, quantity, price)
+                        (order_id, menu_id, quantity, price, status)
                         VALUES ${itemValues.join(', ')}
                     `;
 
@@ -228,20 +229,20 @@ router.get('/orders', verifySessionToken, (req, res) => {
     const sql = `
         SELECT
             o.order_id,
-            o.order_status,
-            o.created_at,
+            o.status AS order_status,
+            o.order_time,
             oi.order_item_id,
             oi.menu_id,
             m.menu_name,
             oi.quantity,
             oi.price AS unit_price,
             (oi.quantity * oi.price) AS item_total,
-            oi.note
+            oi.status AS item_status
         FROM orders o
         LEFT JOIN order_item oi ON o.order_id = oi.order_id
         LEFT JOIN menu m ON oi.menu_id = m.menu_id
         WHERE o.session_id = ?
-        ORDER BY o.created_at DESC, oi.order_item_id ASC
+        ORDER BY o.order_time DESC, oi.order_item_id ASC
     `;
 
     db.query(sql, [session.session_id], (err, results) => {
@@ -275,7 +276,7 @@ router.post('/bill-request', verifySessionToken, (req, res) => {
             }
 
             const checkSql = `
-                SELECT bill_request_id
+                SELECT request_id
                 FROM bill_request
                 WHERE session_id = ?
                   AND status != 'เสร็จสิ้น'
@@ -330,7 +331,7 @@ router.post('/bill-request', verifySessionToken, (req, res) => {
                         res.json({
                             success: true,
                             message: 'ส่งคำขอเก็บเงินเรียบร้อย',
-                            bill_request_id: result.insertId
+                            request_id: result.insertId
                         });
                     });
                 });
