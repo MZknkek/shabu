@@ -154,6 +154,34 @@ app.post('/upload-image', verifyToken, uploadImage.single('image'), (req, res) =
 
 
 // ===============================
+// จับ Route ที่ไม่พบ (404)
+// ===============================
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        message: 'ไม่พบ endpoint ที่เรียก'
+    });
+});
+
+
+// ===============================
+// Error Handler กลาง
+// ===============================
+app.use((err, req, res, next) => {
+    console.error('Server error:', err.message);
+
+    if (res.headersSent) {
+        return next(err);
+    }
+
+    res.status(err.status || 500).json({
+        success: false,
+        message: err.message || 'เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์'
+    });
+});
+
+
+// ===============================
 // เปิด Server
 // ===============================
 app.listen(PORT, () => {
