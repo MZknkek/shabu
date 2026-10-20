@@ -6,7 +6,7 @@ const db = require('../config/database');
 // ===============================
 // API แสดงข้อมูลโปรโมชั่นทั้งหมด
 // ===============================
-router.get('/promotions', (req, res) => {
+router.get('/', (req, res) => {
     const sql = 'SELECT * FROM promotion';
 
     db.query(sql, (err, results) => {
@@ -29,7 +29,7 @@ router.get('/promotions', (req, res) => {
 // ===============================
 // API เพิ่มโปรโมชั่น
 // ===============================
-router.post('/promotions', (req, res) => {
+router.post('/', (req, res) => {
     const {
         promotion_name,
         description,
@@ -87,7 +87,7 @@ router.post('/promotions', (req, res) => {
 // ===============================
 // API แก้ไขโปรโมชั่น
 // ===============================
-router.put('/promotions/:id', (req, res) => {
+router.put('/:id', (req, res) => {
     const { id } = req.params;
 
     const {
@@ -153,7 +153,7 @@ router.put('/promotions/:id', (req, res) => {
 // ===============================
 // API ลบโปรโมชั่น
 // ===============================
-router.delete('/promotions/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
     const { id } = req.params;
 
     db.query(
