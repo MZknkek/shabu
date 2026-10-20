@@ -29,7 +29,41 @@ router.get('/', (req, res) => {
 // ===============================
 // API เพิ่มข้อมูลการชำระเงิน
 // ===============================
+function validatePayment(body) {
+    const errors = [];
+
+    const sessionIdNum = parseInt(body.session_id, 10);
+    if (isNaN(sessionIdNum) || sessionIdNum <= 0) {
+        errors.push('session_id ต้องเป็นตัวเลขมากกว่า 0');
+    }
+
+    if (!body.payment_method || typeof body.payment_method !== 'string' || body.payment_method.trim() === '') {
+        errors.push('payment_method ต้องเป็นข้อความและไม่ว่าง');
+    }
+
+    const amountNum = parseFloat(body.amount);
+    if (isNaN(amountNum) || amountNum < 0) {
+        errors.push('amount ต้องเป็นตัวเลขมากกว่าหรือเท่ากับ 0');
+    }
+
+    if (body.status !== undefined && typeof body.status !== 'string') {
+        errors.push('status ต้องเป็นข้อความ');
+    }
+
+    return errors;
+}
+
+
 router.post('/', (req, res) => {
+    const errors = validatePayment(req.body);
+
+    if (errors.length > 0) {
+        return res.status(400).json({
+            success: false,
+            message: errors.join(', ')
+        });
+    }
+
     const {
         session_id,
         payment_method,
@@ -77,6 +111,15 @@ router.post('/', (req, res) => {
 // ===============================
 router.put('/:id', (req, res) => {
     const { id } = req.params;
+
+    const errors = validatePayment(req.body);
+
+    if (errors.length > 0) {
+        return res.status(400).json({
+            success: false,
+            message: errors.join(', ')
+        });
+    }
 
     const {
         session_id,

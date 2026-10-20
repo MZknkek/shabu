@@ -30,7 +30,38 @@ router.get('/', (req, res) => {
 // ===============================
 // API เพิ่มโต๊ะใหม่
 // ===============================
+function validateTable(body) {
+    const errors = [];
+
+    const tableNumber = body.table_number;
+    if (tableNumber === undefined || tableNumber === null || tableNumber === '' ||
+        (typeof tableNumber !== 'string' && typeof tableNumber !== 'number')) {
+        errors.push('table_number ต้องเป็นข้อความหรือตัวเลขและไม่ว่าง');
+    }
+
+    const capacityNum = parseInt(body.capacity, 10);
+    if (isNaN(capacityNum) || capacityNum < 1) {
+        errors.push('capacity ต้องเป็นจำนวนเต็มมากกว่าหรือเท่ากับ 1');
+    }
+
+    if (body.status !== undefined && typeof body.status !== 'string') {
+        errors.push('status ต้องเป็นข้อความ');
+    }
+
+    return errors;
+}
+
+
 router.post('/', (req, res) => {
+    const errors = validateTable(req.body);
+
+    if (errors.length > 0) {
+        return res.status(400).json({
+            success: false,
+            message: errors.join(', ')
+        });
+    }
+
     const {
         table_number,
         capacity,
@@ -71,6 +102,15 @@ router.post('/', (req, res) => {
 // ===============================
 router.put('/:id', (req, res) => {
     const { id } = req.params;
+
+    const errors = validateTable(req.body);
+
+    if (errors.length > 0) {
+        return res.status(400).json({
+            success: false,
+            message: errors.join(', ')
+        });
+    }
 
     const {
         table_number,

@@ -29,7 +29,36 @@ router.get('/', (req, res) => {
 // ===============================
 // API เพิ่มเมนูอาหาร
 // ===============================
+function validateMenu(body) {
+    const errors = [];
+
+    if (!body.menu_name || typeof body.menu_name !== 'string' || body.menu_name.trim() === '') {
+        errors.push('menu_name ต้องเป็นข้อความและไม่ว่าง');
+    }
+
+    const priceNum = parseFloat(body.price);
+    if (isNaN(priceNum) || priceNum < 0) {
+        errors.push('price ต้องเป็นตัวเลขมากกว่าหรือเท่ากับ 0');
+    }
+
+    if (body.status !== undefined && typeof body.status !== 'string') {
+        errors.push('status ต้องเป็นข้อความ');
+    }
+
+    return errors;
+}
+
+
 router.post('/', (req, res) => {
+    const errors = validateMenu(req.body);
+
+    if (errors.length > 0) {
+        return res.status(400).json({
+            success: false,
+            message: errors.join(', ')
+        });
+    }
+
     const {
         menu_name,
         description,
@@ -79,6 +108,15 @@ router.post('/', (req, res) => {
 // ===============================
 router.put('/:id', (req, res) => {
     const { id } = req.params;
+
+    const errors = validateMenu(req.body);
+
+    if (errors.length > 0) {
+        return res.status(400).json({
+            success: false,
+            message: errors.join(', ')
+        });
+    }
 
     const {
         menu_name,
