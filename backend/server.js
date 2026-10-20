@@ -16,7 +16,25 @@ if (!process.env.JWT_SECRET) {
 const app = express();
 const PORT = 3000;
 
-app.use(cors());
+const allowedOrigins = [
+    'http://localhost',
+    'http://127.0.0.1',
+    'http://localhost:5500',
+    'http://127.0.0.1:5500',
+    ...(process.env.CORS_ORIGINS
+        ? process.env.CORS_ORIGINS.split(',').map(o => o.trim()).filter(Boolean)
+        : [])
+];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        return callback(new Error('CORS policy: origin not allowed'), false);
+    }
+}));
+
 app.use(express.json());
 
 const imageStorage = multer.diskStorage({
@@ -82,13 +100,13 @@ app.get('/', (req, res) => {
 // ===============================
 // ทดสอบการเชื่อมต่อฐานข้อมูล
 // ===============================
-app.get('/test-db', (req, res) => {
+app.get('/test-db', verifyToken, (req, res) => {
     db.query('SELECT 1 AS test', (err, results) => {
         if (err) {
+            console.error('test-db error:', err.message);
             return res.status(500).json({
                 success: false,
-                message: 'เชื่อมต่อฐานข้อมูลไม่สำเร็จ',
-                error: err.message
+                message: 'เชื่อมต่อฐานข้อมูลไม่สำเร็จ กรุณาตรวจสอบการตั้งค่าฐานข้อมูล'
             });
         }
 
