@@ -1540,3 +1540,311 @@ nav a.active{
     display:none;
 
 }
+
+/* =========================
+   START SESSION MODAL
+========================= */
+
+.start-session-modal{
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,0.45);
+
+    display:none;
+    align-items:center;
+    justify-content:center;
+
+    z-index:9999;
+
+    padding:20px;
+}
+
+.start-session-modal.show{
+    display:flex;
+}
+
+
+.start-session-box{
+    width:100%;
+    max-width:520px;
+
+    background:#fff;
+
+    border-radius:18px;
+
+    box-shadow:0 20px 60px rgba(0,0,0,0.25);
+
+    overflow:hidden;
+
+    animation:startModalIn .2s ease;
+}
+
+
+@keyframes startModalIn{
+
+    from{
+        opacity:0;
+        transform:translateY(15px) scale(.97);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+
+}
+
+
+/* HEADER */
+
+.start-session-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:22px 24px;
+
+    border-bottom:1px solid #eee;
+}
+
+
+.start-session-header h2{
+    margin:0;
+
+    font-size:24px;
+}
+
+
+.start-session-header p{
+    margin:6px 0 0;
+
+    color:#777;
+
+    font-size:16px;
+}
+
+
+.modal-close-btn{
+    width:38px;
+    height:38px;
+
+    border:none;
+    border-radius:50%;
+
+    background:#eee;
+
+    font-size:25px;
+
+    cursor:pointer;
+}
+
+
+.modal-close-btn:hover{
+    background:#ddd;
+}
+
+
+/* BODY */
+
+.start-session-body{
+    padding:24px;
+}
+
+
+.start-session-body > label{
+    display:block;
+
+    margin-bottom:10px;
+
+    font-weight:700;
+
+    font-size:16px;
+}
+
+
+.package-options{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+    margin-bottom:24px;
+}
+
+
+.package-option{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    padding:14px 16px;
+
+    border:2px solid #e5e5e5;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+
+.package-option:hover{
+    border-color:#c40000;
+
+    background:#fff8f8;
+}
+
+
+.package-option.selected{
+    border-color:#c40000;
+
+    background:#fff1f1;
+}
+
+
+.package-info{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:4px;
+}
+
+
+.package-name{
+    font-weight:700;
+
+    font-size:17px;
+}
+
+
+.package-detail{
+    color:#777;
+
+    font-size:14px;
+}
+
+
+.package-price{
+    font-weight:700;
+
+    color:#c40000;
+
+    white-space:nowrap;
+}
+
+
+.package-radio{
+    width:20px;
+    height:20px;
+
+    accent-color:#c40000;
+}
+
+
+/* CUSTOMER */
+
+.customer-count-control{
+    display:flex;
+
+    align-items:center;
+
+    width:180px;
+
+    border:1px solid #ddd;
+
+    border-radius:10px;
+
+    overflow:hidden;
+}
+
+
+.customer-count-control button{
+    width:50px;
+    height:45px;
+
+    border:none;
+
+    background:#eee;
+
+    font-size:24px;
+
+    cursor:pointer;
+}
+
+
+.customer-count-control button:hover{
+    background:#ddd;
+}
+
+
+.customer-count-control input{
+    width:80px;
+    height:45px;
+
+    border:none;
+
+    text-align:center;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    outline:none;
+}
+
+
+/* FOOTER */
+
+.start-session-footer{
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:10px;
+
+    padding:18px 24px;
+
+    border-top:1px solid #eee;
+
+    background:#fafafa;
+}
+
+
+.start-session-footer button{
+    border:none;
+
+    border-radius:9px;
+
+    padding:11px 24px;
+
+    font-size:16px;
+
+    cursor:pointer;
+}
+
+
+.modal-cancel{
+    background:#e5e5e5;
+}
+
+
+.modal-confirm{
+    background:#c40000;
+
+    color:#fff;
+
+    font-weight:700;
+}
+
+
+.modal-confirm:hover{
+    background:#a90000;
+}
